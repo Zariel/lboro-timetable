@@ -7,6 +7,7 @@ Usage
 =====
 
 npm install
+
 npm install -g livescript
 
 livescript index.ls <username> <password>
