@@ -143,11 +143,13 @@ findHtml = (nodes) ->
 	html = dfsTag \html, nodes
 	dfsTag \body, html.children .children
 
-parse = (data) ->
+parse = (data, cb) ->
 	handler = new htmlparser.DefaultHandler (err, dom) ->
 		return console.err err if err
 
-		findHtml dom |> findContainer |> getTimeTableData
+		timetable = findHtml dom |> findContainer |> getTimeTableData
+
+		cb timetable
 
 	parser = new htmlparser.Parser handler
 
