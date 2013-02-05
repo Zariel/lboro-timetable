@@ -119,16 +119,25 @@ getTimeTableData = (nodes) ->
 
 	dayRows = findTimetableTrs nodes
 
+	lectures = {}
+
 	i = 0
 	for row in dayRows
 		day = days[i++]
+
+		lectures[day] = {}
 
 		j = 0
 		for slot in row.children
 			time = times[j++]
 			table = dfsTag \div slot.children |> parseTimeTableData
 
-			console.log "#day -> #time = " + JSON.stringify table
+			if table
+				table.time = time
+
+				lectures[day][time] = table
+
+	lectures
 
 findHtml = (nodes) ->
 	html = dfsTag \html, nodes
