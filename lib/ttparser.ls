@@ -113,8 +113,6 @@ parseTimeTableData = (div) ->
 
 getTimeTableData = (nodes) ->
 	days = <[Monday Tuesday Wednesday Thursday Friday ]>
-	times = [ 9 to 17 ]
-
 	dayRows = findTimetableTrs nodes
 
 	lectures = {}
@@ -125,15 +123,16 @@ getTimeTableData = (nodes) ->
 
 		lectures[day] = {}
 
-		j = 0
+		time = 9
 		for slot in row.children
-			time = times[j++]
 			table = dfsTag \div slot.children |> parseTimeTableData
 
 			if table
 				table.time = time
 
 				lectures[day][time] = table
+
+			time++
 
 	lectures
 
