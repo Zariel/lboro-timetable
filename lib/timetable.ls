@@ -120,7 +120,7 @@ doLogin = (user, passw, cb) ->
 				[a, b] = (cookie.match /([^;]*);?.*/)[1].split \=
 				cookies[a] = b
 
-			return getTimeTable res.headers.location, toCookie cookies, cb
+			return getTimeTable res.headers.location, (toCookie cookies), cb
 
 		console.err "UNABLE TO LOGIN"
 
