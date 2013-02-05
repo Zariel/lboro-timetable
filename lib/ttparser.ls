@@ -35,10 +35,21 @@ dfsTag = !(tag, nodes) ->
 			if n2 is not void
 				return n2
 
+dfsText = !(nodes) ->
+	for node in nodes
+		if node.type is \text
+			return node.data
+
+		if node.children
+			n2 = dfsText node.children
+
+			if n2 is not void
+				return n2
+
 pp = (o) -> JSON.stringify o, void, 2 |> console.log
 
 findTimetableTrs = (nodes) ->
-	for node in nodes.children
+	for node in nodes?children
 		if node.type is \tag and node.name is \tr and node.children.length > 1
 			if node.children.0.name is \th
 				continue
@@ -55,6 +66,7 @@ findContainer = (nodes) ->
 
 	dfsTag \table, t2.children
 
+
 parseTimeTableData = (div) ->
 	if div is void
 		return
@@ -65,8 +77,8 @@ parseTimeTableData = (div) ->
 
 	length = div.attribs.style.match /width:(\d)\d+%/ .1 |> parseInt
 
-	module = table.children.0.children.0.children.0.data
-	title = table.children.1.children.0.children.0.data
+	module = dfsTag \td table.children.0.children .children |> dfsText
+	title = dfsTag \td table.children.1.children .children |> dfsText
 
 	row3 = table.children.2.children.0.children.0.data.match /Sem (\d): (.+)$/
 	semester = row3.1 |> parseInt
@@ -81,12 +93,24 @@ parseTimeTableData = (div) ->
 		for i from start to end
 			weeks.push i
 
-	console.log weeks
+	professor = dfsTag \td table.children.3.children .children |> dfsText
+	building = dfsTag \td table.children.4.children .children |> dfsText
+	room = dfsTag \td table.children.6.children .children |> dfsText
+
+	row8 = dfsTag \td table.children.7.children .children
+	type = if row8
+		then dfsText row8
+		else 'Lecture'
 
 	{ module
 	, title
 	, length
 	, semester
+	, weeks
+	, professor
+	, building
+	, room
+	, type
 	}
 
 getTimeTableData = (nodes) ->
