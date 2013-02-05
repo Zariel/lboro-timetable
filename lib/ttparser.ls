@@ -93,10 +93,9 @@ getTimeTableData = (nodes) ->
 	days = <[Monday Tuesday Wednesday Thursday Friday ]>
 	times = [ 9 to 17 ]
 
-	i = 0
-
 	dayRows = findTimetableTrs nodes
 
+	i = 0
 	for row in dayRows
 		day = days[i++]
 
@@ -116,9 +115,6 @@ parse = (data) ->
 		return console.err err if err
 
 		findHtml dom |> findContainer |> getTimeTableData
-	,
-		versbose: true
-		ignoreWhiteSpace: false
 
 	parser = new htmlparser.Parser handler
 
