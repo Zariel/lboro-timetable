@@ -74,7 +74,7 @@ getTimeTable = (loc, cookies, cb) ->
 			offset += chunk.length
 
 		res.on \end, ->
-			ttable.parse data.toString \ascii
+			cb data
 
 	req.end!
 
