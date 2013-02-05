@@ -2,13 +2,15 @@ require! http
 qs = require \querystring
 require! htmlparser
 
-dfs = (nodes, ids) ->
+ttable = require \./ttparser
+
+dfsFinder = (nodes, ids) ->
 	for node in nodes
 		if node?attribs?name of ids
 			ids[node.attribs.name] = node.attribs.value
 
 		if node.type is \tag and node.children
-			dfs node.children, ids
+			dfsFinder node.children, ids
 
 getFlowIds = (cb) ->
 	opts =
@@ -34,7 +36,7 @@ getFlowIds = (cb) ->
 				for html in node.children
 
 					if html.name is \body
-						dfs html.children, ids
+						dfsFinder html.children, ids
 
 						return cb ids
 
@@ -62,8 +64,6 @@ getTimeTable = (loc, cookies, cb) ->
 			Cookie: cookies
 
 	req = http.request opts, (res) ->
-		console.log res.statusCode
-
 		len = res.headers[\x-db-content-length] |> parseInt
 
 		data = new Buffer len
@@ -74,7 +74,7 @@ getTimeTable = (loc, cookies, cb) ->
 			offset += chunk.length
 
 		res.on \end, ->
-			console.log data.toString!
+			ttable.parse data.toString \ascii
 
 	req.end!
 
