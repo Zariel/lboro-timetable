@@ -55,7 +55,11 @@ findContainer = (nodes) ->
 
 	dfsTag \table, t2.children
 
-parseTimeTableData = (table) ->
+parseTimeTableData = (div) ->
+	if div is void
+		return
+
+	table = dfsTag \table, div.children
 	if table is void
 		return
 
@@ -75,8 +79,9 @@ getTimeTableData = (nodes) ->
 		j = 0
 		for slot in row.children
 			time = times[j++]
-			table = dfsTag \table slot.children |> parseTimeTableData
-			console.log "#day (#time) -> #table" if table
+			table = dfsTag \div slot.children |> parseTimeTableData
+
+			console.log "#day -> #time = " + JSON.stringify table
 
 findHtml = (nodes) ->
 	html = dfsTag \html, nodes
