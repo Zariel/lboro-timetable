@@ -1,6 +1,4 @@
 require! htmlparser
-require! fs
-global <<< require \prelude-ls
 
 dfsClass = !(clazz, nodes) ->
 	for node in nodes
@@ -155,7 +153,11 @@ parse = (data, cb) ->
 
 	parser.parseComplete data
 
-(err, data) <- fs.readFile 'test.html', 'ascii'
-parse data
+
+/*
+(err, data) <- require \fs .readFile 'test.html', 'ascii'
+(tt) <- parse data
+console.log tt
+*/
 
 module.exports.parse = parse
