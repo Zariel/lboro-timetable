@@ -63,7 +63,31 @@ parseTimeTableData = (div) ->
 	if table is void
 		return
 
-	table
+	length = div.attribs.style.match /width:(\d)\d+%/ .1 |> parseInt
+
+	module = table.children.0.children.0.children.0.data
+	title = table.children.1.children.0.children.0.data
+
+	row3 = table.children.2.children.0.children.0.data.match /Sem (\d): (.+)$/
+	semester = row3.1 |> parseInt
+
+	weeks = []
+	for week in row3.2.split /\s*,\s*/
+		split = week.match /(\d+)\s*-?\s*(\d*)/
+
+		start = split.1 |> parseInt
+		end = split.2 or start |> parseInt
+
+		for i from start to end
+			weeks.push i
+
+	console.log weeks
+
+	{ module
+	, title
+	, length
+	, semester
+	}
 
 getTimeTableData = (nodes) ->
 	days = <[Monday Tuesday Wednesday Thursday Friday ]>
