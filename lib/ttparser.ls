@@ -34,16 +34,21 @@ dfsTag = !(tag, nodes) ->
 			if n2 is not void
 				return n2
 
-dfsText = !(nodes) ->
+dfsText = (nodes) ->
+	list = []
 	for node in nodes
 		if node.type is \text
-			return node.data
+			list.push node.data
 
 		if node.children
 			n2 = dfsText node.children
 
 			if n2 is not void
-				return n2
+				list := list ++ n2
+				
+	return list
+
+firstText = head << dfsText
 
 pp = (o) -> JSON.stringify o, void, 2 |> console.log
 
@@ -76,8 +81,8 @@ parseTimeTableData = (div) ->
 
 	length = div.attribs.style.match /width:(\d)\d+%/ .1 |> parseInt
 
-	module = dfsTag \td table.children.0.children .children |> dfsText
-	title = dfsTag \td table.children.1.children .children |> dfsText
+	module = dfsTag \td table.children.0.children .children |> firstText
+	title = dfsTag \td table.children.1.children .children |> firstText
 
 	row3 = table.children.2.children.0.children.0.data.match /Sem (\d): (.+)$/
 	semester = row3.1 |> parseInt
@@ -92,13 +97,13 @@ parseTimeTableData = (div) ->
 		for i from start to end
 			weeks.push dates[semester][i - 1] or i
 
-	professor = dfsTag \td table.children.3.children .children |> dfsText
-	building = dfsTag \td table.children.4.children .children |> dfsText
-	room = dfsTag \td table.children.6.children .children |> dfsText
+	professor = dfsTag \td table.children.3.children .children |> firstText
+	building = dfsTag \td table.children.4.children .children |> firstText
+	room = dfsTag \td table.children.6.children .children |> firstText
 
 	row8 = dfsTag \td table.children.7.children .children
 	type = if row8
-		then dfsText row8
+		then firstText row8
 		else 'Lecture'
 
 	{ module
