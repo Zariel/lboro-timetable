@@ -1,4 +1,5 @@
 require! htmlparser
+dates = require \./dates
 
 dfsClass = !(clazz, nodes) ->
 	for node in nodes
@@ -89,7 +90,7 @@ parseTimeTableData = (div) ->
 		end = split.2 or start |> parseInt
 
 		for i from start to end
-			weeks.push i
+			weeks.push dates[semester][i - 1] or i
 
 	professor = dfsTag \td table.children.3.children .children |> dfsText
 	building = dfsTag \td table.children.4.children .children |> dfsText
