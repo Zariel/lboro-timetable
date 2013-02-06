@@ -60,7 +60,7 @@ findTimetableTrs = (nodes) ->
 			
 			node
 
-findContainer = (nodes) ->
+findContainer = !(nodes, cb) ->
 	container = dfsId \main-content, nodes .children
 
 	t1 = dfsClass \t1ReportsRegion100Width, container
@@ -68,7 +68,7 @@ findContainer = (nodes) ->
 
 	t2 = dfsId "report_#id", t1.children
 
-	dfsTag \table, t2.children
+	cb (dfsTag \table, t2.children)
 
 
 parseTimeTableData = (div) ->
@@ -117,7 +117,7 @@ parseTimeTableData = (div) ->
 	, type
 	}
 
-getTimeTableData = (nodes) ->
+getTimeTableData = !(nodes, cb) ->
 	days = <[Monday Tuesday Wednesday Thursday Friday ]>
 	dayRows = findTimetableTrs nodes
 
@@ -140,18 +140,31 @@ getTimeTableData = (nodes) ->
 
 			time++
 
-	lectures
+	cb lectures
 
-findHtml = (nodes) ->
+findHtml = !(nodes, cb) ->
 	html = dfsTag \html, nodes
-	dfsTag \body, html.children .children
+
+	cb (dfsTag \body, html.children .children)
+
+getYear = (html) ->
+	title = dfsClass \t1RegionHeader, html
+
+	line = (title.children |> dfsText).1
+	[_, year1, year2, sem] = line.match /Timetable (\d+)\/(\d+) - Semester (\d+)/
+
+	year1 + "-" + year2.substring(2, 4)
 
 parse = (data, cb) ->
 	handler = new htmlparser.DefaultHandler (err, dom) ->
 		return console.err err if err
 
-		timetable = findHtml dom |> findContainer |> getTimeTableData
+		(html) <- findHtml dom
+		year = getYear html
+		console.log year
 
+		(container) <- findContainer html
+		(timetable) <- getTimeTableData container
 		cb timetable
 
 	parser = new htmlparser.Parser handler
