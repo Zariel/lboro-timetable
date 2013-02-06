@@ -4,11 +4,11 @@
   "description": "Generate an iCal for Loughborough timetable.",
   "main": "index.ls",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
 	  "htmlparser": ">= 1.7.6",
-	  "livescript": ">= 1.1.1"
+	  "LiveScript": ">= 1.1.1",
+	  "prelude-ls": ">= 0.6.x"
   },
   "repository": "",
   "author": "Chris Bannister",
