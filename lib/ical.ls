@@ -32,17 +32,16 @@ generate = (user, timetable, semester) ->
 		
 	i = 0
 		
-	for date in dates[semester]
-		for day, j in timetable 
-			for lecture in day
-				if date in lecture.weeks then
-					dt = new Date(date)
-					dt.setHours lecture.time
-					dt.addDays j
-					
-					event = generateEvent cal, lecture, dt, uid + (i++)
+	for day, j in timetable
+		for lecture in day
+			for week in lecture.weeks
+				dt = new Date(dates[semester][week])
+				dt.setHours lecture.time
+				dt.addDays j
 
-					cal.addComponent event
+				event = generateEvent cal, lecture, dt, uid + (i++)
+
+				cal.addComponent event
 	
 	console.log cal.toString!
 
