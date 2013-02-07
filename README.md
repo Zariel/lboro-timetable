@@ -10,4 +10,4 @@ npm install
 
 npm install -g livescript
 
-lsc index username password
+lsc index username password > cal.ics
