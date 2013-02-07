@@ -16,7 +16,7 @@ findTimetableTrs = (nodes) ->
 		if node.type is \tag and node.name is \tr and node.children.length > 1
 			if node.children.0.name is \th
 				continue
-			
+
 			node
 
 findContainer = !(nodes, cb) ->
@@ -77,16 +77,12 @@ parseTimeTableData = (div) ->
 	}
 
 getTimeTableData = !(nodes, cb) ->
-	days = <[Monday Tuesday Wednesday Thursday Friday ]>
 	dayRows = findTimetableTrs nodes
 
-	lectures = {}
+	lectures = []
 
-	i = 0
 	for row in dayRows
-		day = days[i++]
-
-		lectures[day] = {}
+		day = []
 
 		time = 9
 		for slot in row.children
@@ -95,36 +91,36 @@ getTimeTableData = !(nodes, cb) ->
 			if table
 				table.time = time
 
-				lectures[day][time] = table
+				day.push table
 
 			time++
 
+		lectures.push day
+
 	cb lectures
-
-findHtml = !(nodes, cb) ->
-	html = dfsTag \html, nodes
-
-	cb (dfsTag \body, html.children .children)
 
 getYear = (html) ->
 	title = dfsClass \t1RegionHeader, html
 
 	line = (title.children |> dfsText).1
-	[_, year1, year2, sem] = line.match /Timetable (\d+)\/(\d+) - Semester (\d+)/
+	[ _, year1, year2, semester ] = line.match /Timetable (\d+)\/(\d+) - Semester (\d+)/
 
-	year1 + "-" + year2.substring(2, 4)
+	year = year1 + "-" + year2.substring(2, 4)
+
+	{ year, semester }
 
 parse = (data, cb) ->
 	handler = new htmlparser.DefaultHandler (err, dom) ->
-		return console.err err if err
+		return console.log err if err
 
 		(html) <- findHtml dom
-		year = getYear html
-		console.log year
+		{ year
+		, semester
+		} = getYear html
 
 		(container) <- findContainer html
 		(timetable) <- getTimeTableData container
-		cb timetable
+		cb timetable, semester
 
 	parser = new htmlparser.Parser handler
 
