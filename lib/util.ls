@@ -1,3 +1,4 @@
+global <<< require \prelude-ls
 
 dfsClass = module.exports.dfsClass = !(clazz, nodes) ->
 	for node in nodes
