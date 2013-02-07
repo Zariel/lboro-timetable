@@ -125,11 +125,4 @@ parse = (data, cb) ->
 
 	parser.parseComplete data
 
-
-/*
-(err, data) <- require \fs .readFile 'test.html', 'ascii'
-(tt, sem) <- parse data
-require \./ical .generate \phcb3, tt, sem
-*/
-
 module.exports.parse = parse
