@@ -22,7 +22,7 @@ getFlowIds = (cb) ->
 			Origin: \http://luis.lboro.ac.uk
 
 	handler = new htmlparser.DefaultHandler (err, dom) ->
-		return console.err err if err
+		return console.log err if err
 	
 		ids = 
 			p_flow_id: true
