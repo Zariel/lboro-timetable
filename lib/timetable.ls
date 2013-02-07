@@ -1,4 +1,5 @@
 require! http
+require! url
 qs = require \querystring
 require! htmlparser
 
@@ -120,9 +121,13 @@ doLogin = (user, passw, cb) ->
 				[a, b] = (cookie.match /([^;]*);?.*/)[1].split \=
 				cookies[a] = b
 
+			q = url.parse res.headers.location, true
+			if q?query?notification_msg
+				return console.log "Invalid login"
+
 			return getTimeTable res.headers.location, (toCookie cookies), cb
 
-		console.err "UNABLE TO LOGIN"
+		console.log "UNABLE TO LOGIN"
 
 	req.write data
 
