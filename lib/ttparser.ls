@@ -62,8 +62,8 @@ parseTimeTableData = (div) ->
 
 	row8 = dfsTag \td table.children.7.children .children
 	type = if row8
-		then firstText row8
-		else 'Lecture'
+			then firstText row8
+			else 'Lecture'
 
 	{ module
 	, title
@@ -129,8 +129,8 @@ parse = (data, cb) ->
 
 /*
 (err, data) <- require \fs .readFile 'test.html', 'ascii'
-(tt) <- parse data
-console.log tt
+(tt, sem) <- parse data
+require \./ical .generate \phcb3, tt, sem
 */
 
 module.exports.parse = parse
