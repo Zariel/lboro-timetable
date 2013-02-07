@@ -8,7 +8,9 @@
   "dependencies": {
 	  "htmlparser": ">= 1.7.6",
 	  "LiveScript": ">= 1.1.1",
-	  "prelude-ls": ">= 0.6.x"
+	  "prelude-ls": ">= 0.6.x",
+	  "icalendar": ">= 0.6.x",
+	  "date-utils": ">= 1.2.x"
   },
   "repository": "",
   "author": "Chris Bannister",
