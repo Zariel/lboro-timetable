@@ -18,7 +18,7 @@ generateEvent = (cal, lecture, date, uid) ->
 	sum	+= lecture.room + "\n"
 	sum += lecture.type
 
-	event.setSummary lecture.title
+	event.setSummary lecture.title + " - " + lecture.type
 	event.setDate date, 3600 * lecture.length
 	event.setDescription sum
 	event.addProperty \LOCATION, lecture.room
